@@ -18,6 +18,7 @@ class EventRouter implements IBaseRouter {
     this.router.post("/purchase", validateRequest.handle(ticketTransactionDTO), eventController.purchaseTickets);
 
     // GET endpoints
+    this.router.get("/", eventController.getEvents);
     this.router.get("/:id", eventController.getEventById);
 
     return this.router;

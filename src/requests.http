@@ -15,7 +15,7 @@ Content-Type: application/json
 
 {
   "name": "Charity Auction",
-  "date": "21/12/2025",
+  "date": "22/12/2025",
   "capacity": 100,
   "costPerTicket": 5
 }
@@ -25,6 +25,10 @@ Content-Type: application/json
 GET {{host}}/api/events/{{eventId}} HTTP/1.1
 Content-Type: application/json
 
+### Get All Events
+# @name GetEvents
+GET {{host}}/api/events HTTP/1.1
+Content-Type: application/json
 
 ### Purchase Tickets
 # @name PurchaseTickets

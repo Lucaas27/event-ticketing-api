@@ -22,6 +22,10 @@ export class EventService {
     return this.updateTicketAvailability(event, transactionData.nTickets);
   }
 
+  public async getEvents(): Promise<IEvent[]> {
+    return await EventModel.find();
+  }
+
   public async getEventById(eventId: string): Promise<IEvent> {
     const event = await EventModel.findById(eventId);
     if (!event) {

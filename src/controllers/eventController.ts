@@ -11,6 +11,7 @@ class EventController {
     this.createEvent = this.createEvent.bind(this);
     this.purchaseTickets = this.purchaseTickets.bind(this);
     this.getEventById = this.getEventById.bind(this);
+    this.getEvents = this.getEvents.bind(this);
   }
 
   async createEvent(req: Request, res: Response) {
@@ -84,6 +85,11 @@ class EventController {
     } else {
       res.status(404).json({ message: "Event not found" });
     }
+  }
+
+  async getEvents(req: Request, res: Response): Promise<void> {
+    const events = await this.eventService.getEvents();
+    res.status(200).json(events);
   }
 }
 
