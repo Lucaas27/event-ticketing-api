@@ -1,5 +1,8 @@
 {
   "name": "event-ticketing-api",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "version": "1.0.0",
   "description": "A RESTful API for an event ticketing system.",
   "homepage": "https://github.com/Lucaas27/event-ticketing-api#readme",
