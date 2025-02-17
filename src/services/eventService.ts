@@ -5,6 +5,7 @@ import { EventModel, IEvent } from "@/models/eventModel";
 
 export class EventService {
   async addEvent(eventData: CreateEventDTO): Promise<IEvent> {
+    // Create and save the event
     const event = new EventModel({
       name: eventData.name,
       date: new Date(eventData.date), // Store as Date object
@@ -54,12 +55,12 @@ export class EventService {
     event.availableTickets -= ticketsToDeduct;
     event.soldTickets = event.capacity - event.availableTickets; // Update soldTickets based on available
 
-    console.log("Updating ticket availability:", {
-      eventId: event._id,
-      ticketsToDeduct,
-      newAvailable: event.availableTickets,
-      newSoldTickets: event.soldTickets
-    });
+    // console.log("Updating ticket availability:", {
+    //   eventId: event._id,
+    //   ticketsToDeduct,
+    //   newAvailable: event.availableTickets,
+    //   newSoldTickets: event.soldTickets
+    // });
 
     return await event.save();
   }
@@ -70,7 +71,7 @@ export class EventService {
       const twelveMonthsAgo = new Date();
       twelveMonthsAgo.setMonth(today.getMonth() - 12);
 
-      console.log("Query date range:", { start: twelveMonthsAgo, end: today });
+      // console.log("Query date range:", { start: twelveMonthsAgo, end: today });
 
       const events = await EventModel.find({
         date: {
@@ -79,7 +80,7 @@ export class EventService {
         }
       }).lean();
 
-      console.log("Found events:", JSON.stringify(events, null, 2));
+      // console.log("Found events:", JSON.stringify(events, null, 2));
 
       const monthlyStats = new Map<string, MonthlyStatisticsDTO>();
 
@@ -102,14 +103,14 @@ export class EventService {
         const eventDate = new Date(event.date);
         const key = `${eventDate.getFullYear()}-${eventDate.getMonth() + 1}`;
 
-        console.log("Processing event:", {
-          name: event.name,
-          date: eventDate,
-          key,
-          soldTickets: event.soldTickets,
-          capacity: event.capacity,
-          costPerTicket: event.costPerTicket
-        });
+        // console.log("Processing event:", {
+        //   name: event.name,
+        //   date: eventDate,
+        //   key,
+        //   soldTickets: event.soldTickets,
+        //   capacity: event.capacity,
+        //   costPerTicket: event.costPerTicket
+        // });
 
         const stats = monthlyStats.get(key);
 
@@ -125,21 +126,23 @@ export class EventService {
           const prevTotal = stats.averageTicketsSold * (stats.nEvents - 1);
           stats.averageTicketsSold = (prevTotal + ticketsSoldPercentage) / stats.nEvents;
 
-          console.log("Updated stats:", {
-            key,
-            soldTickets: event.soldTickets,
-            ticketsSoldPercentage,
-            currentRevenue,
-            totalRevenue: stats.revenue,
-            averageTicketsSold: stats.averageTicketsSold
-          });
+          // console.log("Updated stats:", {
+          //   key,
+          //   soldTickets: event.soldTickets,
+          //   ticketsSoldPercentage,
+          //   currentRevenue,
+          //   totalRevenue: stats.revenue,
+          //   averageTicketsSold: stats.averageTicketsSold
+          // });
         }
       });
 
       return Array.from(monthlyStats.values()).sort((a, b) => b.year - a.year || b.month - a.month);
     } catch (error) {
-      console.error("Error in getMonthlyStatistics:", error);
-      throw new Error("Failed to calculate monthly statistics");
+      // console.error("Error in getMonthlyStatistics:", error);
+      throw new Error(
+        "Failed to calculate monthly statistics: " + (error instanceof Error ? error.message : String(error))
+      );
     }
   }
 }

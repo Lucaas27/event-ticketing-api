@@ -22,7 +22,7 @@
     "build": "tsc && tsc-alias",
     "start": "npm run lint:fix && npm run build && node dist/src/index.js",
     "dev": "nodemon src/index.ts",
-    "test": "jest",
+    "test": "set NODE_ENV=test && jest",
     "test:watch": "jest --watch"
   },
   "devDependencies": {

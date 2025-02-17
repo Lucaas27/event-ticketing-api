@@ -6,7 +6,7 @@
 
 ### Health Check
 # @name HealthCheck
-GET {{host}}/health HTTP/1.1
+GET {{host}}/ HTTP/1.1
 
 ### Create New Event
 # @name CreateEvent
