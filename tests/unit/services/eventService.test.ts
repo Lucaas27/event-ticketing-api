@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { EventModel } from "@/models/eventModel";
 import { EventService } from "@/services/eventService";
 import mongoose from "mongoose";
