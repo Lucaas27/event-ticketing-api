@@ -1,0 +1,23 @@
+{
+    "prettier.experimentalTernaries": true,
+    "prettier.arrowParens": "always",
+    "prettier.printWidth": 120,
+    "prettier.singleQuote": false,
+    "prettier.trailingComma": "none",
+    "eslint.enable": true,
+    "eslint.run": "onType",
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always",
+        "source.organizeImports": "always",
+    },
+    "eslint.format.enable": false,
+    "eslint.ignoreUntitled": true,
+    "eslint.useFlatConfig": true,
+    "eslint.lintTask.enable": true,
+}
