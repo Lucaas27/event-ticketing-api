@@ -1,36 +1,21 @@
-import express, { type Application, type Request, type Response } from "express";
+import App from "@/app";
 import { Server as HttpServer } from "http";
 
 class Server {
-  readonly app: Application;
-  private static instance: Server;
+  public appInstance: App;
   private httpServer?: HttpServer;
 
-  private constructor() {
-    this.app = express();
-    this.initializeRoutes();
+  constructor() {
+    this.appInstance = new App();
   }
 
-  public static getInstance(): Server {
-    if (!Server.instance) {
-      Server.instance = new Server();
-    }
-    return Server.instance;
-  }
-
-  private initializeRoutes(): void {
-    this.app.get("/", (_req: Request, res: Response) => {
-      res.send("Hello World!");
-    });
-  }
-
-  public start(port: number): void {
-    this.httpServer = this.app.listen(port, () => {
+  public async start(port: number): Promise<void> {
+    this.httpServer = this.appInstance.app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   }
 
-  public stop(): Promise<void> {
+  public async stop(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.httpServer?.close((err) => {
         if (err) {

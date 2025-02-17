@@ -10,7 +10,7 @@ import tseslint from "typescript-eslint";
 export default [
   { ignores: ["node_modules/", "dist/", "**/*.config.*"] },
   { files: ["src/**/*.{js,mjs,cjs,ts}", "tests/**/*.{js,mjs,cjs,ts}"] },
-  { languageOptions: { globals: globals.node } },
+  { languageOptions: { globals: globals.node, parserOptions: { ecmaVersion: 2016, sourceType: "commonjs" } } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
