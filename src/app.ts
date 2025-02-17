@@ -28,7 +28,7 @@ class App {
     // Fallback for undefined routes
     this.app.use("*", (req: Request, res: Response) => {
       ResponseHandler.error(res, `Cannot ${req.method} ${req.originalUrl}`, 404, {
-        availableEndpoints: ["/health", "/api/events"]
+        availableEndpoints: ["/health", "/api/events", "/api/events/stats"]
       });
     });
   }

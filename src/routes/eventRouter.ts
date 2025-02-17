@@ -19,6 +19,7 @@ class EventRouter implements IBaseRouter {
 
     // GET endpoints
     this.router.get("/", eventController.getEvents);
+    this.router.get("/stats", eventController.getMonthlyStatistics);
     this.router.get("/:id", eventController.getEventById);
 
     return this.router;

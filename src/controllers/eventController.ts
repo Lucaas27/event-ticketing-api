@@ -12,6 +12,7 @@ class EventController {
     this.purchaseTickets = this.purchaseTickets.bind(this);
     this.getEventById = this.getEventById.bind(this);
     this.getEvents = this.getEvents.bind(this);
+    this.getMonthlyStatistics = this.getMonthlyStatistics.bind(this);
   }
 
   async createEvent(req: Request, res: Response) {
@@ -20,7 +21,7 @@ class EventController {
 
       // Parse date from DD/MM/YYYY format
       const [day, month, year] = date.split("/");
-      const parsedDate = new Date(year, month - 1, day);
+      const parsedDate = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
 
       const eventData = {
         name,
@@ -66,7 +67,6 @@ class EventController {
             ResponseHandler.error(res, error.message, 404);
             break;
           case "Event is sold out":
-          case "Event has already passed":
           case "Not enough tickets available":
             ResponseHandler.error(res, error.message, 400);
             break;
@@ -90,6 +90,19 @@ class EventController {
   async getEvents(req: Request, res: Response): Promise<void> {
     const events = await this.eventService.getEvents();
     res.status(200).json(events);
+  }
+
+  async getMonthlyStatistics(req: Request, res: Response) {
+    try {
+      const statistics = await this.eventService.getMonthlyStatistics();
+      ResponseHandler.success(res, {
+        monthlyStats: statistics,
+        totalMonths: statistics.length
+      });
+    } catch (error) {
+      console.error("Statistics endpoint error:", error);
+      ResponseHandler.error(res, error instanceof Error ? error.message : "Failed to retrieve statistics", 500);
+    }
   }
 }
 
