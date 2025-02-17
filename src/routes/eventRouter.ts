@@ -13,8 +13,13 @@ class EventRouter implements IBaseRouter {
   }
 
   public setupRoutes(): Router {
+    // POST endpoints
     this.router.post("/", validateRequest.handle(createEventDTO), eventController.createEvent);
     this.router.post("/purchase", validateRequest.handle(ticketTransactionDTO), eventController.purchaseTickets);
+
+    // GET endpoints
+    this.router.get("/:id", eventController.getEventById);
+
     return this.router;
   }
 }

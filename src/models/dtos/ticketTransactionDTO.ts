@@ -1,7 +1,10 @@
+import mongoose from "mongoose";
 import { z } from "zod";
 
 export const ticketTransactionDTO = z.object({
-  eventId: z.string().min(10, { message: "Invalid event ID format" }),
+  eventId: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Invalid MongoDB ObjectId format"
+  }),
   nTickets: z
     .number()
     .positive({ message: "Number of tickets must be positive" })

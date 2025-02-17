@@ -11,9 +11,6 @@ export class ResponseHandler {
   }
 
   static error(res: Response, message: string, status: number = 500, details?: unknown): void {
-    if (details instanceof Error) {
-      console.error(details.stack);
-    }
     const response: ApiResponse = {
       success: false,
       error: {

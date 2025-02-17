@@ -1,8 +1,9 @@
 import { errorHandler, logger } from "@/middleware";
 import eventRouter from "@/routes/eventRouter";
 import healthRouter from "@/routes/healthRouter";
+import { ResponseHandler } from "@/utils/responseHandler";
 import cors from "cors";
-import express, { type Application } from "express";
+import express, { type Application, NextFunction, Request, Response } from "express";
 
 class App {
   public readonly app: Application;
@@ -23,10 +24,20 @@ class App {
   private setupRoutes(): void {
     this.app.use("/", healthRouter.setupRoutes());
     this.app.use("/api/events", eventRouter.setupRoutes());
+
+    // Fallback for undefined routes
+    this.app.use("*", (req: Request, res: Response) => {
+      ResponseHandler.error(res, `Cannot ${req.method} ${req.originalUrl}`, 404, {
+        availableEndpoints: ["/health", "/api/events"]
+      });
+    });
   }
 
   private setupErrorHandler(): void {
-    this.app.use(errorHandler.handle.bind(errorHandler));
+    // Important: Express requires all 4 parameters for error middleware
+    this.app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+      errorHandler.handle(err, req, res, next);
+    });
   }
 }
 

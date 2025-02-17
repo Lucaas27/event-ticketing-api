@@ -1,10 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ResponseHandler } from "@/utils/responseHandler";
 import { NextFunction, Request, Response } from "express";
 import { AnyZodObject, ZodError } from "zod";
 
 class ErrorMiddleware {
-  handle(err: Error, req: Request, res: Response): void {
-    ResponseHandler.error(res, "Something went wrong! Please try again later.", 500, err);
+  handle(err: Error, req: Request, res: Response, next: NextFunction): void {
+    // Handle JSON parsing errors
+    if (err instanceof SyntaxError && "body" in err) {
+      ResponseHandler.error(res, "Invalid JSON format", 400);
+      return;
+    }
+
+    // Log the error for debugging
+    console.error("Error:", err);
+
+    // Send generic error response
+    ResponseHandler.error(res, "Something went wrong! Please try again later.", 500);
   }
 }
 

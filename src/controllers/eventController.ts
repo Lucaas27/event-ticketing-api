@@ -10,6 +10,7 @@ class EventController {
     // Bind methods to preserve 'this' context
     this.createEvent = this.createEvent.bind(this);
     this.purchaseTickets = this.purchaseTickets.bind(this);
+    this.getEventById = this.getEventById.bind(this);
   }
 
   async createEvent(req: Request, res: Response) {
@@ -72,6 +73,16 @@ class EventController {
             ResponseHandler.error(res, "Transaction failed", 500);
         }
       }
+    }
+  }
+
+  async getEventById(req: Request, res: Response): Promise<void> {
+    const eventId = req.params.id;
+    const event = await this.eventService.getEventById(eventId);
+    if (event) {
+      res.status(200).json(event);
+    } else {
+      res.status(404).json({ message: "Event not found" });
     }
   }
 }
