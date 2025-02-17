@@ -1,4 +1,5 @@
 import { errorHandler, logger } from "@/middleware";
+import eventRouter from "@/routes/eventRouter";
 import healthRouter from "@/routes/healthRouter";
 import cors from "cors";
 import express, { NextFunction, Request, Response, type Application } from "express";
@@ -21,6 +22,7 @@ class App {
 
   private setupRoutes(): void {
     this.app.use("/", healthRouter.setupRoutes());
+    this.app.use("/api/events", eventRouter.setupRoutes());
   }
 
   private setupErrorHandler(): void {

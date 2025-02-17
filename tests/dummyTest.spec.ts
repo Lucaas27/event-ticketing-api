@@ -1,10 +1,11 @@
 import Database from "@/database/mongo";
 import { EventModel } from "@/models/eventModel";
 import Server from "@/server";
+import { format } from "date-fns";
 import supertest from "supertest";
 import TestAgent from "supertest/lib/agent";
 
-describe("Dummy tests", () => {
+describe("Connection tests", () => {
   const server: Server = new Server();
   const db: Database = new Database();
   let request: TestAgent;
@@ -20,26 +21,22 @@ describe("Dummy tests", () => {
     await server.stop();
   });
 
-  test("Express server", async () => {
+  test("server should return a healthy status", async () => {
     const response = await request.get("/");
     expect(response.body.status).toBe("healthy");
     expect(response.status).toBe(200);
   });
 
-  test("Mongoose connection", async () => {
+  test("mongo should create and retrieve an event from database", async () => {
     await EventModel.create({
-      title: "Test",
-      description: "Test description",
-      date: new Date(),
-      price: 10,
-      location: "Test location",
-      capacity: 100,
-      availableTickets: 100,
-      isActive: true
+      name: "Test",
+      date: format(new Date(), "dd/MM/yyyy"),
+      capacity: 1000,
+      costPerTicket: 10
     });
 
-    const result = await EventModel.findOne({ title: "Test" });
+    const result = await EventModel.findOne({ name: "Test" });
 
-    expect(result?.title).toBe("Test");
+    expect(result?.name).toBe("Test");
   });
 });

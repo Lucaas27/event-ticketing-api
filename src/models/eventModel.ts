@@ -1,27 +1,34 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface IEvent extends Document {
-  title: string;
-  description: string;
-  date: Date;
-  location: string;
+  name: string;
+  date: string;
   capacity: number;
-  price: number;
+  costPerTicket: number;
   availableTickets: number;
-  isActive: boolean;
-  createdAt: Date;
 }
 
-const eventSchema = new Schema<IEvent>({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  date: { type: Date, required: true },
-  location: { type: String, required: true },
-  capacity: { type: Number, required: true },
-  price: { type: Number, required: true },
-  availableTickets: { type: Number, required: true },
-  isActive: { type: Boolean, default: true },
-  createdAt: { type: Date, default: Date.now }
+const eventSchema = new Schema<IEvent>(
+  {
+    name: { type: String, required: true },
+    date: {
+      type: String,
+      required: true,
+      unique: true // Ensures only one event per day
+    },
+    capacity: { type: Number, required: true },
+    costPerTicket: { type: Number, required: true },
+    availableTickets: { type: Number }
+  },
+  { timestamps: true }
+);
+
+// Pre-save middleware to set initial available tickets
+eventSchema.pre("save", function (next) {
+  if (this.isNew) {
+    this.availableTickets = this.capacity;
+  }
+  next();
 });
 
 export const EventModel = mongoose.model<IEvent>("Event", eventSchema);
