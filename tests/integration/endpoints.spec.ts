@@ -11,7 +11,7 @@ describe("Complete Workflow", () => {
     server = new Server();
     db = new Database();
     await db.connect(process.env.MONGO_URL as string);
-    await server.start(3300);
+    await server.start(3330);
   });
 
   afterAll(async () => {
