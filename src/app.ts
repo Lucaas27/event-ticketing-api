@@ -2,7 +2,7 @@ import { errorHandler, logger } from "@/middleware";
 import eventRouter from "@/routes/eventRouter";
 import healthRouter from "@/routes/healthRouter";
 import cors from "cors";
-import express, { NextFunction, Request, Response, type Application } from "express";
+import express, { type Application } from "express";
 
 class App {
   public readonly app: Application;
@@ -17,7 +17,7 @@ class App {
   private setupMiddleware(): void {
     this.app.use(express.json());
     this.app.use(cors());
-    this.app.use((req: Request, res: Response, next: NextFunction) => logger.handle(req, res, next));
+    this.app.use(logger.handle.bind(logger));
   }
 
   private setupRoutes(): void {
@@ -26,7 +26,7 @@ class App {
   }
 
   private setupErrorHandler(): void {
-    this.app.use((err: Error, req: Request, res: Response) => errorHandler.handle(err, req, res));
+    this.app.use(errorHandler.handle.bind(errorHandler));
   }
 }
 

@@ -1,0 +1,29 @@
+@host = http://localhost:3000
+
+### Health Check
+# @name HealthCheck
+GET {{host}}/health HTTP/1.1
+
+### Create New Event
+# @name CreateEvent
+@date = {{$datetime "DD/MM/YYYY" 365}}
+POST {{host}}/api/events HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Charity Auction",
+  "date": "{{date}}",
+  "capacity": 100,
+  "costPerTicket": 5
+}
+
+### Purchase Tickets
+# @name PurchaseTickets
+@eventId = {{CreateEvent.response.body.data.id}}
+POST {{host}}/api/events/purchase HTTP/1.1
+Content-Type: application/json
+
+{
+  "eventId": "{{eventId}}",
+  "nTickets": 1
+}

@@ -1,16 +1,19 @@
+import { ResponseHandler } from "@/utils/responseHandler";
 import { NextFunction, Request, Response } from "express";
 import { AnyZodObject, ZodError } from "zod";
 
 class ErrorMiddleware {
   handle(err: Error, req: Request, res: Response): void {
-    console.error(err.name, err.message);
-    res.status(500).json({ error: "Something went wrong! Please try again later." });
+    ResponseHandler.error(res, "Something went wrong! Please try again later.", 500, err);
   }
 }
 
 class LoggerMiddleware {
   handle(req: Request, res: Response, next: NextFunction): void {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - ${req.statusCode}`);
+    // Log after response is sent
+    res.on("finish", () => {
+      console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl} - ${res.statusCode}`);
+    });
     next();
   }
 }
@@ -23,9 +26,8 @@ class RequestValidationMiddleware {
         next();
       } catch (error) {
         if (error instanceof ZodError) {
-          res.status(400).json({
-            error: "Validation failed",
-            details: error.errors.map((e) => ({
+          ResponseHandler.error(res, "Validation failed", 400, {
+            validationErrors: error.errors.map((e) => ({
               field: e.path.join("."),
               message: e.message
             }))
